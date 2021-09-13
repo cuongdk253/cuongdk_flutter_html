@@ -153,6 +153,7 @@ class Style {
   /// Inherited: no,
   /// Default: unspecified (null)
   double? width;
+  WidthSize? widthSize;
 
   /// CSS attribute "`word-spacing`"
   ///
@@ -176,6 +177,8 @@ class Style {
   Border? border;
   Alignment? alignment;
   String? markerContent;
+  BorderRadius? borderRadius;
+  FlexWrap? flexWrap;
 
   /// MaxLine
   ///
@@ -217,14 +220,17 @@ class Style {
     this.verticalAlign,
     this.whiteSpace,
     this.width,
+    this.widthSize,
     this.wordSpacing,
     this.before,
     this.after,
     this.border,
+    this.borderRadius,
     this.alignment,
     this.markerContent,
     this.maxLines,
     this.textOverflow,
+    this.flexWrap,
   }) {
     if (this.alignment == null &&
         (display == Display.BLOCK || display == Display.LIST_ITEM)) {
@@ -233,16 +239,17 @@ class Style {
   }
 
   static Map<String, Style> fromThemeData(ThemeData theme) => {
-    'h1': Style.fromTextStyle(theme.textTheme.headline1!),
-    'h2': Style.fromTextStyle(theme.textTheme.headline2!),
-    'h3': Style.fromTextStyle(theme.textTheme.headline3!),
-    'h4': Style.fromTextStyle(theme.textTheme.headline4!),
-    'h5': Style.fromTextStyle(theme.textTheme.headline5!),
-    'h6': Style.fromTextStyle(theme.textTheme.headline6!),
-    'body': Style.fromTextStyle(theme.textTheme.bodyText2!),
-  };
+        'h1': Style.fromTextStyle(theme.textTheme.headline1!),
+        'h2': Style.fromTextStyle(theme.textTheme.headline2!),
+        'h3': Style.fromTextStyle(theme.textTheme.headline3!),
+        'h4': Style.fromTextStyle(theme.textTheme.headline4!),
+        'h5': Style.fromTextStyle(theme.textTheme.headline5!),
+        'h6': Style.fromTextStyle(theme.textTheme.headline6!),
+        'body': Style.fromTextStyle(theme.textTheme.bodyText2!),
+      };
 
-  static Map<String, Style> fromCss(String css, OnCssParseError? onCssParseError) {
+  static Map<String, Style> fromCss(
+      String css, OnCssParseError? onCssParseError) {
     final declarations = parseExternalCss(css, onCssParseError);
     Map<String, Style> styleMap = {};
     declarations.forEach((key, value) {
@@ -307,32 +314,45 @@ class Style {
       verticalAlign: other.verticalAlign,
       whiteSpace: other.whiteSpace,
       width: other.width,
+      widthSize: other.widthSize,
       wordSpacing: other.wordSpacing,
 
       before: other.before,
       after: other.after,
       border: other.border,
+      borderRadius: other.borderRadius,
       //TODO merge border
       alignment: other.alignment,
       markerContent: other.markerContent,
       maxLines: other.maxLines,
       textOverflow: other.textOverflow,
+
+      //TODO merge flex
+      flexWrap: other.flexWrap,
+      
     );
   }
 
   Style copyOnlyInherited(Style child) {
-    FontSize? finalFontSize = child.fontSize != null ?
-      fontSize != null && child.fontSize?.units == "em" ?
-        FontSize(child.fontSize!.size! * fontSize!.size!) : child.fontSize
-      : fontSize != null && fontSize!.size! < 0 ?
-        FontSize.percent(100) : fontSize;
-    LineHeight? finalLineHeight = child.lineHeight != null ?
-      child.lineHeight?.units == "length" ?
-        LineHeight(child.lineHeight!.size! / (finalFontSize == null ? 14 : finalFontSize.size!) * 1.2) : child.lineHeight
-      : lineHeight;
+    FontSize? finalFontSize = child.fontSize != null
+        ? fontSize != null && child.fontSize?.units == "em"
+            ? FontSize(child.fontSize!.size! * fontSize!.size!)
+            : child.fontSize
+        : fontSize != null && fontSize!.size! < 0
+            ? FontSize.percent(100)
+            : fontSize;
+    LineHeight? finalLineHeight = child.lineHeight != null
+        ? child.lineHeight?.units == "length"
+            ? LineHeight(child.lineHeight!.size! /
+                (finalFontSize == null ? 14 : finalFontSize.size!) *
+                1.2)
+            : child.lineHeight
+        : lineHeight;
+
     return child.copyWith(
-      backgroundColor: child.backgroundColor != Colors.transparent ?
-        child.backgroundColor : backgroundColor,
+      backgroundColor: child.backgroundColor != Colors.transparent
+          ? child.backgroundColor
+          : backgroundColor,
       color: child.color ?? color,
       direction: child.direction ?? direction,
       display: display == Display.NONE ? display : child.display,
@@ -346,14 +366,18 @@ class Style {
       listStyleType: child.listStyleType ?? listStyleType,
       listStylePosition: child.listStylePosition ?? listStylePosition,
       textAlign: child.textAlign ?? textAlign,
-      textDecoration: TextDecoration.combine(
-          [child.textDecoration ?? TextDecoration.none,
-            textDecoration ?? TextDecoration.none]),
+      textDecoration: TextDecoration.combine([
+        child.textDecoration ?? TextDecoration.none,
+        textDecoration ?? TextDecoration.none
+      ]),
       textShadow: child.textShadow ?? textShadow,
       whiteSpace: child.whiteSpace ?? whiteSpace,
       wordSpacing: child.wordSpacing ?? wordSpacing,
       maxLines: child.maxLines ?? maxLines,
       textOverflow: child.textOverflow ?? textOverflow,
+      height: child.height ?? height,
+      width: child.width ?? width,
+      flexWrap: child.flexWrap ?? flexWrap,
     );
   }
 
@@ -383,15 +407,18 @@ class Style {
     VerticalAlign? verticalAlign,
     WhiteSpace? whiteSpace,
     double? width,
+    WidthSize? widthSize,
     double? wordSpacing,
     String? before,
     String? after,
     Border? border,
+    BorderRadius? borderRadius,
     Alignment? alignment,
     String? markerContent,
     int? maxLines,
     TextOverflow? textOverflow,
     bool? beforeAfterNull,
+    FlexWrap? flexWrap,
   }) {
     return Style(
       backgroundColor: backgroundColor ?? this.backgroundColor,
@@ -424,10 +451,13 @@ class Style {
       before: beforeAfterNull == true ? null : before ?? this.before,
       after: beforeAfterNull == true ? null : after ?? this.after,
       border: border ?? this.border,
+      borderRadius: borderRadius ?? this.borderRadius,
       alignment: alignment ?? this.alignment,
       markerContent: markerContent ?? this.markerContent,
       maxLines: maxLines ?? this.maxLines,
       textOverflow: textOverflow ?? this.textOverflow,
+      flexWrap: flexWrap ?? this.flexWrap,
+      widthSize: widthSize ?? this.widthSize,
     );
   }
 
@@ -452,10 +482,16 @@ class Style {
 
 enum Display {
   BLOCK,
+  FLEX,
   INLINE,
   INLINE_BLOCK,
   LIST_ITEM,
   NONE,
+}
+
+enum FlexWrap {
+  NOWRAP,
+  WRAP
 }
 
 class FontSize {
@@ -519,6 +555,12 @@ class LineHeight {
   static const normal = LineHeight(1.2);
 }
 
+class WidthSize {
+  final double? value;
+  final SizeType? type;
+  const WidthSize(this.value, {this.type = SizeType.NORMAL});
+}
+
 enum ListStyleType {
   LOWER_ALPHA,
   UPPER_ALPHA,
@@ -546,4 +588,9 @@ enum VerticalAlign {
 enum WhiteSpace {
   NORMAL,
   PRE,
+}
+
+enum SizeType {
+  PERCENT,
+  NORMAL,
 }
