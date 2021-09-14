@@ -495,6 +495,9 @@ Style declarationsToStyle(Map<String, List<css.Expression>> declarations) {
       }
     }
   });
+  if (style.margin != null && style.margin!.bottom == 50) {
+    print(style.margin);
+  }
   return style;
 }
 

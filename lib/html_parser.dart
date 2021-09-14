@@ -425,48 +425,71 @@ class HtmlParser extends StatelessWidget {
           style: tree.style,
           shrinkWrap: context.parser.shrinkWrap,
           child: tree.style.flexWrap == FlexWrap.WRAP
-              ? LayoutBuilder(
-                  builder: (_, constraints) {
-                    return Wrap(
-                      textDirection: tree.style.direction,
-                      children: List.generate(tree.children.length, (index) {
-                        double _width = 0.0;
-                        double _height =
-                            tree.children[index].style.height ?? 0.0;
-                        if (tree.children[index].style.widthSize!.type ==
-                            SizeType.PERCENT) {
-                          _width = constraints.maxWidth *
-                              tree.children[index].style.widthSize!.value! /
-                              100;
-                        }
+              ? Wrap(
+                  textDirection: tree.style.direction,
+                  children: List.generate(tree.children.length, (index) {
+                    double _width = 0.0;
+                    double _height = tree.children[index].style.height ?? 0.0;
+                    // if (tree.children[index].style.widthSize!.type ==
+                    //     SizeType.PERCENT) {
+                    //   _width = constraints.maxWidth *
+                    //       tree.children[index].style.widthSize!.value! /
+                    //       100;
+                    // }
 
-                        double _heightAdd = 0.0;
-                        if (tree.children[index].children[0].style.margin !=
-                            null) {
-                          _heightAdd = tree.children[index].children[0].style
-                                  .margin!.left *
+                    double _heightAdd = 0.0;
+                    if (tree.children[index].children[0].style.margin != null) {
+                      _heightAdd =
+                          tree.children[index].children[0].style.margin!.left *
                               2;
-                        }
+                    }
 
-                        return Container(
-                          height: _height + _heightAdd,
-                          width: _width,
-                          child: StyledText(
-                            textSpan: TextSpan(
-                              text: (tree.style.listStylePosition ==
-                                      ListStylePosition.INSIDE)
-                                  ? '${newContext.style.markerContent}'
-                                  : null,
-                              children: getChildren(tree.children[index]),
-                              style: newContext.style.generateTextStyle(),
-                            ),
-                            style: newContext.style,
-                            renderContext: context,
+                    return ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: tree.children[index].style.widthSize!.type !=
+                                SizeType.PERCENT
+                            ? tree.children[index].style.widthSize!.value!
+                            : double.infinity,
+                        maxHeight: _height + _heightAdd,
+                      ), // max height in px
+                      child: FractionallySizedBox(
+                        widthFactor: tree
+                                    .children[index].style.widthSize!.type ==
+                                SizeType.PERCENT
+                            ? tree.children[index].style.widthSize!.value! / 100
+                            : 1,
+                        child: StyledText(
+                          textSpan: TextSpan(
+                            text: (tree.style.listStylePosition ==
+                                    ListStylePosition.INSIDE)
+                                ? '${newContext.style.markerContent}'
+                                : null,
+                            children: getChildren(tree.children[index]),
+                            style: newContext.style.generateTextStyle(),
                           ),
-                        );
-                      }),
+                          style: newContext.style,
+                          renderContext: context,
+                        ),
+                      ),
                     );
-                  },
+
+                    return Container(
+                      height: _height + _heightAdd,
+                      width: 300,
+                      child: StyledText(
+                        textSpan: TextSpan(
+                          text: (tree.style.listStylePosition ==
+                                  ListStylePosition.INSIDE)
+                              ? '${newContext.style.markerContent}'
+                              : null,
+                          children: getChildren(tree.children[index]),
+                          style: newContext.style.generateTextStyle(),
+                        ),
+                        style: newContext.style,
+                        renderContext: context,
+                      ),
+                    );
+                  }),
                 )
               : Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1017,6 +1040,10 @@ class HtmlParser extends StatelessWidget {
   /// (4) Top and Bottom margins of a box with a height of zero or no in-flow children.
   static StyledElement _collapseMargins(StyledElement tree) {
     //Short circuit if we've reached a leaf of the tree
+    if (tree.elementId == "div2") {
+      print(tree);
+    }
+
     if (tree.children.isEmpty) {
       // Handle case (4) from above.
       if ((tree.style.height ?? 0) == 0) {
@@ -1044,15 +1071,15 @@ class HtmlParser extends StatelessWidget {
       if (tree.style.margin == null) {
         tree.style.margin = EdgeInsets.only(top: newOuterMarginTop);
       } else {
-        tree.style.margin = tree.style.margin!.copyWith(top: newOuterMarginTop);
+        // tree.style.margin = tree.style.margin!.copyWith(top: newOuterMarginTop);
       }
 
       // And remove the child's margin
       if (tree.children.first.style.margin == null) {
         tree.children.first.style.margin = EdgeInsets.zero;
       } else {
-        tree.children.first.style.margin =
-            tree.children.first.style.margin!.copyWith(top: 0);
+        // tree.children.first.style.margin =
+        //     tree.children.first.style.margin!.copyWith(top: 0);
       }
     }
 
@@ -1067,16 +1094,16 @@ class HtmlParser extends StatelessWidget {
       if (tree.style.margin == null) {
         tree.style.margin = EdgeInsets.only(bottom: newOuterMarginBottom);
       } else {
-        tree.style.margin =
-            tree.style.margin!.copyWith(bottom: newOuterMarginBottom);
+        // tree.style.margin =
+        //     tree.style.margin!.copyWith(bottom: newOuterMarginBottom);
       }
 
       // And remove the child's margin
       if (tree.children.last.style.margin == null) {
         tree.children.last.style.margin = EdgeInsets.zero;
       } else {
-        tree.children.last.style.margin =
-            tree.children.last.style.margin!.copyWith(bottom: 0);
+        // tree.children.last.style.margin =
+        //     tree.children.last.style.margin!.copyWith(bottom: 0);
       }
     }
 
@@ -1093,15 +1120,17 @@ class HtmlParser extends StatelessWidget {
               EdgeInsets.only(bottom: newInternalMargin);
         } else {
           tree.children[i - 1].style.margin = tree.children[i - 1].style.margin!
-              .copyWith(bottom: newInternalMargin);
+              // .copyWith(bottom: newInternalMargin)
+              ;
         }
 
         if (tree.children[i].style.margin == null) {
           tree.children[i].style.margin =
               EdgeInsets.only(top: newInternalMargin);
         } else {
-          tree.children[i].style.margin =
-              tree.children[i].style.margin!.copyWith(top: newInternalMargin);
+          tree.children[i].style.margin = tree.children[i].style.margin!
+              // .copyWith(top: newInternalMargin)
+              ;
         }
       }
     }

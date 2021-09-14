@@ -329,7 +329,6 @@ class Style {
 
       //TODO merge flex
       flexWrap: other.flexWrap,
-      
     );
   }
 
@@ -489,10 +488,7 @@ enum Display {
   NONE,
 }
 
-enum FlexWrap {
-  NOWRAP,
-  WRAP
-}
+enum FlexWrap { NOWRAP, WRAP }
 
 class FontSize {
   final double? size;

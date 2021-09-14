@@ -87,13 +87,17 @@ const htmlData = r"""
 
     <div style="display: flex; flex-wrap: wrap;">
       <div style="width: 50%; height: 140px;">
+   
         <div style="
           padding:16px; 
           background-color: #FFF7F2;
           border: 1px solid #FFD3B2;
           box-sizing: border-box;
           border-radius: 8px;
-          margin: 8px;
+          margin-left: 8px;
+          margin-right: 8px;
+          margin-bottom: 8px;
+          margin-top: 8px;
           height: -webkit-fill-available;
         ">
           <div style="height: 32px; width: 32px;">
@@ -120,7 +124,10 @@ const htmlData = r"""
           border: 1px solid #B5D8FE;
           box-sizing: border-box;
           border-radius: 8px;
-          margin: 8px;
+          margin-left: 8px;
+          margin-right: 8px;
+          margin-bottom: 8px;
+          margin-top: 8px;
           height: max-content;
           height: -webkit-fill-available;
         ">
@@ -148,7 +155,10 @@ const htmlData = r"""
           border: 1px solid #F7C3C2;
           box-sizing: border-box;
           border-radius: 8px;
-          margin: 8px;
+          margin-left: 8px;
+          margin-right: 8px;
+          margin-bottom: 8px;
+          margin-top: 8px;
           height: -webkit-fill-available;
         ">
           <div style="height: 32px; width: 32px;">
@@ -175,7 +185,10 @@ const htmlData = r"""
           border: 1px solid #C4F0D4;
           box-sizing: border-box;
           border-radius: 8px;
-          margin: 8px;
+          margin-left: 8px;
+          margin-right: 8px;
+          margin-bottom: 8px;
+          margin-top: 8px;
           height: max-content;
           height: -webkit-fill-available;
         ">
@@ -399,82 +412,12 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Html(
-          data: htmlData,
-          // style: {
-          //   "table": Style(
-          //     backgroundColor: Color.fromARGB(0x50, 0xee, 0xee, 0xee),
-          //   ),
-          //   "tr": Style(
-          //     border: Border(bottom: BorderSide(color: Colors.grey)),
-          //   ),
-          //   "th": Style(
-          //     padding: EdgeInsets.all(6),
-          //     backgroundColor: Colors.grey,
-          //   ),
-          //   "td": Style(
-          //     padding: EdgeInsets.all(6),
-          //     alignment: Alignment.topLeft,
-          //   ),
-          //   'h5': Style(maxLines: 2, textOverflow: TextOverflow.ellipsis),
-          // },
-          // customRender: {
-          //   "table": (context, child) {
-          //     return SingleChildScrollView(
-          //       scrollDirection: Axis.horizontal,
-          //       child:
-          //           (context.tree as TableLayoutElement).toWidget(context),
-          //     );
-          //   },
-          //   "bird": (RenderContext context, Widget child) {
-          //     return TextSpan(text: "🐦");
-          //   },
-          //   "flutter": (RenderContext context, Widget child) {
-          //     return FlutterLogo(
-          //       style: (context.tree.element!.attributes['horizontal'] != null)
-          //           ? FlutterLogoStyle.horizontal
-          //           : FlutterLogoStyle.markOnly,
-          //       textColor: context.style.color!,
-          //       size: context.style.fontSize!.size! * 5,
-          //     );
-          //   },
-          // },
-          // customImageRenders: {
-          //   networkSourceMatcher(domains: ["flutter.dev"]):
-          //       (context, attributes, element) {
-          //     return FlutterLogo(size: 36);
-          //   },
-          //   networkSourceMatcher(domains: ["mydomain.com"]):
-          //       networkImageRender(
-          //     headers: {"Custom-Header": "some-value"},
-          //     altWidget: (alt) => Text(alt ?? ""),
-          //     loadingWidget: () => Text("Loading..."),
-          //   ),
-          //   // On relative paths starting with /wiki, prefix with a base url
-          //   (attr, _) =>
-          //           attr["src"] != null && attr["src"]!.startsWith("/wiki"):
-          //       networkImageRender(
-          //           mapUrl: (url) => "https://upload.wikimedia.org" + url!),
-          //   // Custom placeholder image for broken links
-          //   networkSourceMatcher():
-          //       networkImageRender(altWidget: (_) => FlutterLogo()),
-          // },
-          // onLinkTap: (url, _, __, ___) {
-          //   print("Opening $url...");
-          // },
-          // onImageTap: (src, _, __, ___) {
-          //   print(src);
-          // },
-          // onImageError: (exception, stackTrace) {
-          //   print(exception);
-          // },
-          // onCssParseError: (css, messages) {
-          //   print("css that errored: $css");
-          //   print("error messages:");
-          //   messages.forEach((element) {
-          //     print(element);
-          //   });
-          // },
+        child: Column(
+          children: [
+            Html(
+              data: htmlData,
+            ),
+          ],
         ),
       ),
     );
