@@ -495,9 +495,6 @@ Style declarationsToStyle(Map<String, List<css.Expression>> declarations) {
       }
     }
   });
-  if (style.margin != null && style.margin!.bottom == 50) {
-    print(style.margin);
-  }
   return style;
 }
 
@@ -956,14 +953,24 @@ class ExpressionMapping {
 
   static double? expressionToPaddingLength(css.Expression value) {
     if (value is css.NumberTerm) {
-      return double.tryParse(value.text);
+      return double.tryParse(value.text)! >= 0
+          ? double.tryParse(value.text)
+          : null;
     } else if (value is css.EmTerm) {
-      return double.tryParse(value.text);
+      return double.tryParse(value.text)! >= 0
+          ? double.tryParse(value.text)
+          : null;
     } else if (value is css.RemTerm) {
-      return double.tryParse(value.text);
+      return double.tryParse(value.text)! >= 0
+          ? double.tryParse(value.text)
+          : null;
     } else if (value is css.LengthTerm) {
-      return double.tryParse(
-          value.text.replaceAll(new RegExp(r'\s+(\d+\.\d+)\s+'), ''));
+      return double.tryParse(value.text
+                  .replaceAll(new RegExp(r'\s+(\d+\.\d+)\s+'), ''))! >=
+              0
+          ? double.tryParse(
+              value.text.replaceAll(new RegExp(r'\s+(\d+\.\d+)\s+'), ''))
+          : null;
     }
     return null;
   }

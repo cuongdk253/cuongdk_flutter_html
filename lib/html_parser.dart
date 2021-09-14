@@ -1119,18 +1119,18 @@ class HtmlParser extends StatelessWidget {
           tree.children[i - 1].style.margin =
               EdgeInsets.only(bottom: newInternalMargin);
         } else {
-          tree.children[i - 1].style.margin = tree.children[i - 1].style.margin!
-              // .copyWith(bottom: newInternalMargin)
-              ;
+          // tree.children[i - 1].style.margin = tree.children[i - 1].style.margin!
+          //     .copyWith(bottom: newInternalMargin)
+          //     ;
         }
 
         if (tree.children[i].style.margin == null) {
           tree.children[i].style.margin =
               EdgeInsets.only(top: newInternalMargin);
         } else {
-          tree.children[i].style.margin = tree.children[i].style.margin!
-              // .copyWith(top: newInternalMargin)
-              ;
+          // tree.children[i].style.margin = tree.children[i].style.margin!
+          //      .copyWith(top: newInternalMargin)
+          //     ;
         }
       }
     }
