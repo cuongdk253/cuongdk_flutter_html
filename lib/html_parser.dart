@@ -418,6 +418,8 @@ class HtmlParser extends StatelessWidget {
         return children;
       }
 
+      print(tree.style.flexWrap);
+      
       return WidgetSpan(
         child: ContainerSpan(
           key: AnchorKey.of(key, tree),
@@ -428,15 +430,7 @@ class HtmlParser extends StatelessWidget {
               ? Wrap(
                   textDirection: tree.style.direction,
                   children: List.generate(tree.children.length, (index) {
-                    double _width = 0.0;
                     double _height = tree.children[index].style.height ?? 0.0;
-                    // if (tree.children[index].style.widthSize!.type ==
-                    //     SizeType.PERCENT) {
-                    //   _width = constraints.maxWidth *
-                    //       tree.children[index].style.widthSize!.value! /
-                    //       100;
-                    // }
-
                     double _heightAdd = 0.0;
                     if (tree.children[index].children[0].style.margin != null) {
                       _heightAdd =
@@ -470,23 +464,6 @@ class HtmlParser extends StatelessWidget {
                           style: newContext.style,
                           renderContext: context,
                         ),
-                      ),
-                    );
-
-                    return Container(
-                      height: _height + _heightAdd,
-                      width: 300,
-                      child: StyledText(
-                        textSpan: TextSpan(
-                          text: (tree.style.listStylePosition ==
-                                  ListStylePosition.INSIDE)
-                              ? '${newContext.style.markerContent}'
-                              : null,
-                          children: getChildren(tree.children[index]),
-                          style: newContext.style.generateTextStyle(),
-                        ),
-                        style: newContext.style,
-                        renderContext: context,
                       ),
                     );
                   }),
