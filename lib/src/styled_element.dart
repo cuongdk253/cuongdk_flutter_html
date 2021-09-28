@@ -113,7 +113,6 @@ StyledElement parseStyledElement(
       break;
     case "body":
       styledElement.style = Style(
-        margin: EdgeInsets.all(8.0),
         display: Display.BLOCK,
       );
       break;

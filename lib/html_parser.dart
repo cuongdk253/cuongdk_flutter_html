@@ -418,8 +418,6 @@ class HtmlParser extends StatelessWidget {
         return children;
       }
 
-      print(tree.style.flexWrap);
-      
       return WidgetSpan(
         child: ContainerSpan(
           key: AnchorKey.of(key, tree),
